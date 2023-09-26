@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rainfall Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        .chart-container {
+            max-width: 80%; 
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .chart {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h1 style="text-align: center;">Rainfall Chart</h1>
+        <div class="chart">
+            <h2>Bar Chart</h2>
+            <canvas id="barChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart">
+            <h2>Pie Chart</h2>
+            <canvas id="pieChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart">
+            <h2>Line Chart</h2>
+            <canvas id="lineChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const labels = <%- JSON.stringify(rainfallData.map(item => Object.keys(item)[0])) %>;
+            const values = <%- JSON.stringify(rainfallData.map(item => Object.values(item)[0])) %>;
+            
+            const colors = ['blue', 'green', 'red', 'orange', 'purple', 'yellow', 'cyan', 'magenta', 'lime', 'pink', 'teal', 'indigo'];
+
+            // Bar Chart
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            const dataBar = {
+                labels: labels,
+                datasets: [{
+                    label: 'Rainfall',
+                    data: values,
+                    backgroundColor: colors,
+                    borderColor: colors, 
+                    borderWidth: 1
+                }]
+            };
+            const configBar = {
+                type: 'bar',
+                data: dataBar,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            new Chart(ctxBar, configBar);
+
+            // Pie Chart
+            const ctxPie = document.getElementById('pieChart').getContext('2d');
+            const dataPie = {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors,
+                }]
+            };
+            const configPie = {
+                type: 'pie',
+                data: dataPie,
+            };
+            new Chart(ctxPie, configPie);
+
+            // Line Chart
+            const ctxLine = document.getElementById('lineChart').getContext('2d');
+            const dataLine = {
+                labels: labels,
+                datasets: [{
+                    label: 'Rainfall',
+                    data: values,
+                    fill: false,
+                    borderColor: 'blue',
+                }]
+            };
+            const configLine = {
+                type: 'line',
+                data: dataLine,
+            };
+            new Chart(ctxLine, configLine);
+        });
+    </script>
+</body>
+</html>
