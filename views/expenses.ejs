@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        .chart-container {
+            max-width: 80%; 
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .chart {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h1 style="text-align: center;"><%= title %></h1>
+        <div class="chart">
+            <h2>Bar Chart</h2>
+            <canvas id="barChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart">
+            <h2>Pie Chart</h2>
+            <canvas id="pieChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart">
+            <h2>Line Chart</h2>
+            <canvas id="lineChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const labels = <%- JSON.stringify(expensesData.map(item => Object.keys(item)[0])) %>;
+            const values = <%- JSON.stringify(expensesData.map(item => Object.values(item)[0])) %>;
+            
+            const fixedColors = ['red', 'green', 'blue', 'yellow'];
+
+            // Bar Chart
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            const dataBar = {
+                labels: labels,
+                datasets: [{
+                    label: 'Expenses',
+                    data: values,
+                    backgroundColor: fixedColors,
+                    borderColor: fixedColors, 
+                    borderWidth: 1
+                }]
+            };
+            const configBar = {
+                type: 'bar',
+                data: dataBar,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            new Chart(ctxBar, configBar);
+
+            // Pie Chart
+            const ctxPie = document.getElementById('pieChart').getContext('2d');
+            const dataPie = {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: fixedColors,
+                }]
+            };
+            const configPie = {
+                type: 'pie',
+                data: dataPie,
+            };
+            new Chart(ctxPie, configPie);
+
+            // Line Chart
+            const ctxLine = document.getElementById('lineChart').getContext('2d');
+            const dataLine = {
+                labels: labels,
+                datasets: [{
+                    label: 'Expenses',
+                    data: values,
+                    fill: false,
+                    borderColor: 'blue',
+                }]
+            };
+            const configLine = {
+                type: 'line',
+                data: dataLine,
+            };
+            new Chart(ctxLine, configLine);
+        });
+    </script>
+</body>
+</html>
