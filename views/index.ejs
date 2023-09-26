@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <h1><%= title %></h1>
+    
+    <!-- Bar Chart -->
+    <canvas id="barChart" width="40" height="40"></canvas>
+    
+    <script>
+        const ctx = document.getElementById('barChart').getContext('2d');
+        const data = {
+            labels: <%- JSON.stringify(expensesData.map(item => Object.keys(item)[0])) %>,
+            datasets: [{
+                label: 'Expenses',
+                data: <%- JSON.stringify(expensesData.map(item => Object.values(item)[0])) %>,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+        const config = {
+            type: 'bar',
+            data: data,
+        };
+        new Chart(ctx, config);
+    </script>
+</body>
+</html>
